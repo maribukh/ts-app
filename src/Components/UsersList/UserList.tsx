@@ -1,49 +1,50 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { data, Person } from "../../static/data";
-import UserAddForm from "../UserAddForm/UserAddForm";
-import UserListItem from "../UserItem/UserListItem";
+import UsersListTableHead, {
+  SortType,
+} from "../UsersListTableHead/UsersListTableHead";
 import styles from "./UsersList.module.css";
+import UserListItem from "../UserItem/UserListItem";
+import UserAddForm from "./UserAddForm/UserAddForm";
 
 const UserList = () => {
   const [users, setUsers] = useState<Person[]>(data);
-  const nextId = useRef(
-    data.length > 0 ? Math.max(...data.map((u) => u.id)) + 1 : 1
-  );
+  const [ageSort, setAgeSort] = useState<SortType>();
 
   const removeUser = (id: number) => {
     setUsers((previousUsers) => previousUsers.filter((user) => user.id !== id));
   };
 
-  const addUser = (newUser: Person) => {
-    const userWithId = { ...newUser, id: nextId.current };
-    nextId.current += 1;
-    setUsers((previousUsers) => [userWithId, ...previousUsers]);
+  const sortByAge = () => {
+    if (ageSort === "asc") {
+      setUsers((previousUsers) => {
+        const newUsers = [...previousUsers];
+        newUsers.sort((userA, userB) => userA.age - userB.age);
+        return newUsers;
+      });
+      setAgeSort("desc");
+    } else {
+      setUsers((previousUsers) => {
+        const newUsers = [...previousUsers];
+        newUsers.sort((userA, userB) => userB.age - userA.age);
+        return newUsers;
+      });
+      setAgeSort("asc");
+    }
   };
 
   return (
     <div className={styles.table_container}>
       <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Age</th>
-            <th>Gender</th>
-            <th>Job</th>
-            <th>Country</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+        <UsersListTableHead sortByAge={sortByAge} ageSort={ageSort} />
         <tbody>
           {users.map((user) => (
-            <UserListItem key={user.id} user={user} removeUser={removeUser} />
+            <React.Fragment key={user.id}>
+              <UserListItem user={user} removeUser={removeUser} />
+            </React.Fragment>
           ))}
         </tbody>
       </table>
-      {}
-      <UserAddForm onAddUser={addUser} />
     </div>
   );
 };

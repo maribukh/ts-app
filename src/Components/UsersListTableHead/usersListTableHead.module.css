@@ -1,16 +1,15 @@
 .name {
-  display: flex;
+  display        : flex;
   justify-content: center;
-  align-items: center;
-  gap: 5px;
-  text-wrap: nowrap;
+  align-items    : center;
+  gap            : 5px;
+  text-wrap      : nowrap;
 }
 
-.sort_image{
-  width: 16px;
-  height: 16px;
-}
 
-.desc {
-  transform: rotate(180deg);
+
+.sort_image {
+  width      : 10px;
+  height     : 10px;
+  margin-left: 5px;
 }
