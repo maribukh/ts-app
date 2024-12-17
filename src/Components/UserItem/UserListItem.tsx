@@ -1,6 +1,7 @@
 import { Person } from "../../static/data";
 import styles from './UserListItem.module.css'
 
+
 type UserListItemProps = {
   user: Person;
   removeUser: (id: number) => void;

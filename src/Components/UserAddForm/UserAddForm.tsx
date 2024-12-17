@@ -3,10 +3,10 @@ import { Person } from "../../static/data";
 import styles from "./UserAddForm.module.css";
 
 type UserAddFormProps = {
-  addUser: (newUser: Person) => void;
+  onAddUser: (newUser: Person) => void;
 };
 
-const UserAddForm = ({ addUser }: UserAddFormProps) => {
+const UserAddForm = ({ onAddUser }: UserAddFormProps) => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -19,22 +19,28 @@ const UserAddForm = ({ addUser }: UserAddFormProps) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     const newUser: Person = {
       id: Date.now(),
       first_name: formData.first_name,
       last_name: formData.last_name,
       email: formData.email,
-      age: parseInt(formData.age, 10),
+      age: Number(formData.age),
       gender: formData.gender,
       job: formData.job,
       country: formData.country,
     };
-    addUser(newUser);
+
+    onAddUser(newUser);
+
     setFormData({
       first_name: "",
       last_name: "",
@@ -54,6 +60,7 @@ const UserAddForm = ({ addUser }: UserAddFormProps) => {
         placeholder="First Name"
         value={formData.first_name}
         onChange={handleChange}
+        className={styles.input}
         required
       />
       <input
@@ -62,6 +69,7 @@ const UserAddForm = ({ addUser }: UserAddFormProps) => {
         placeholder="Last Name"
         value={formData.last_name}
         onChange={handleChange}
+        className={styles.input}
         required
       />
       <input
@@ -70,6 +78,7 @@ const UserAddForm = ({ addUser }: UserAddFormProps) => {
         placeholder="Email"
         value={formData.email}
         onChange={handleChange}
+        className={styles.input}
         required
       />
       <input
@@ -78,6 +87,7 @@ const UserAddForm = ({ addUser }: UserAddFormProps) => {
         placeholder="Age"
         value={formData.age}
         onChange={handleChange}
+        className={styles.input}
         required
       />
       <input
@@ -86,6 +96,8 @@ const UserAddForm = ({ addUser }: UserAddFormProps) => {
         placeholder="Gender"
         value={formData.gender}
         onChange={handleChange}
+        className={styles.input}
+        required
       />
       <input
         type="text"
@@ -93,6 +105,8 @@ const UserAddForm = ({ addUser }: UserAddFormProps) => {
         placeholder="Job"
         value={formData.job}
         onChange={handleChange}
+        className={styles.input}
+        required
       />
       <input
         type="text"
@@ -100,8 +114,12 @@ const UserAddForm = ({ addUser }: UserAddFormProps) => {
         placeholder="Country"
         value={formData.country}
         onChange={handleChange}
+        className={styles.input}
+        required
       />
-      <button type="submit">Add User</button>
+      <button type="submit" className={styles.button}>
+        Add User
+      </button>
     </form>
   );
 };
