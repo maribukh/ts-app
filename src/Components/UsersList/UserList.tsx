@@ -6,6 +6,7 @@ import styles from "./UsersList.module.css";
 
 const UserList = () => {
   const [users, setUsers] = useState<Person[]>(data);
+  const [ageSort, setAgeSort] = useState<"asc" | "desc" | undefined>();
   const nextId = useRef(
     data.length > 0 ? Math.max(...data.map((u) => u.id)) + 1 : 1
   );
@@ -20,6 +21,18 @@ const UserList = () => {
     setUsers((previousUsers) => [userWithId, ...previousUsers]);
   };
 
+  const sortByAge = () => {
+    setUsers((previousUsers) => {
+      const sortedUsers = [...previousUsers];
+      sortedUsers.sort((a, b) => {
+        if (ageSort === "asc") return b.age - a.age; 
+        return a.age - b.age; 
+      });
+      return sortedUsers;
+    });
+    setAgeSort(ageSort === "asc" ? "desc" : "asc"); 
+  };
+
   return (
     <div className={styles.table_container}>
       <table>
@@ -29,7 +42,9 @@ const UserList = () => {
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            <th>Age</th>
+            <th onClick={sortByAge} style={{ cursor: "pointer" }}>
+              Age {ageSort === "asc" ? "▲" : ageSort === "desc" ? "▼" : ""}
+            </th>
             <th>Gender</th>
             <th>Job</th>
             <th>Country</th>
@@ -42,7 +57,6 @@ const UserList = () => {
           ))}
         </tbody>
       </table>
-      {}
       <UserAddForm onAddUser={addUser} />
     </div>
   );
